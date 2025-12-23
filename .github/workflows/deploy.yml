@@ -1,0 +1,62 @@
+name: Deploy sur GitHub Pages
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+# Permissions necessaires pour deployer sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permettre un seul deploiement concurrent
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build pour production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperation du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Installation des dependances
+        run: npm ci
+
+      - name: Execution des tests
+        run: npm test
+
+      - name: Build de production
+        run: npm run build -- --base-href=/untitled/
+
+      - name: Configuration de Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload des artefacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist/untitled'
+
+  deploy:
+    name: Deploiement
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploiement sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

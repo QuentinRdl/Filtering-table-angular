@@ -1,0 +1,67 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test-and-build:
+    name: Tests et Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - name: Recuperation du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Installation des dependances
+        run: npm ci
+
+      - name: Execution des tests
+        run: npm test
+
+      - name: Build de production
+        run: npm run build
+
+      - name: Upload des artefacts de build
+        if: matrix.node-version == '20.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  quality-check:
+    name: Verification de la qualite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperation du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Installation des dependances
+        run: npm ci
+
+      - name: Verification TypeScript
+        run: npx tsc --noEmit
+
+      - name: Analyse de code (si prettier est configure)
+        run: npm run format --if-present || echo "Pas de script format"
+        continue-on-error: true

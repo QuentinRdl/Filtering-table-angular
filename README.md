@@ -1,6 +1,15 @@
-# Untitled
+# Affichage Tableaux de Tuples avec Filtres - Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+![CI/CD](https://github.com/QuentinRdl/Filtering-table-angular/workflows/CI/CD/badge.svg)
+![Deploy](https://github.com/QuentinRdl/Filtering-table-angular/workflows/Deploy%20sur%20GitHub%20Pages/badge.svg)
+
+Application Angular pour afficher et filtrer une liste de tuples.
+
+## Fonctionnalites
+
+- Affichage d'une liste de tuples (id, nom, valeur)
+- Filtre par nom avec recherche partielle
+- Filtre par valeur 
 
 ## Development server
 
@@ -43,17 +52,3 @@ To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use th
 ```bash
 ng test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
