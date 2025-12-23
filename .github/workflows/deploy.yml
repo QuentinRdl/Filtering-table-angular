@@ -38,7 +38,7 @@ jobs:
         run: npm test
 
       - name: Build de production
-        run: npm run build -- --base-href=/untitled/
+        run: npm run build -- --base-href=/Filtering-table-angular/
 
       - name: Configuration de Pages
         uses: actions/configure-pages@v4
@@ -46,7 +46,7 @@ jobs:
       - name: Upload des artefacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist/untitled'
+          path: 'dist/untitled/browser'
 
   deploy:
     name: Deploiement
